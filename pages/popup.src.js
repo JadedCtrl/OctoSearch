@@ -19,8 +19,7 @@ const populateengines = (engines) => {
 
 const populatepresets = () => {
   let presetDropdown = document.getElementById("presets");
-  let presets = Array();
-  try { presets = localStorage.getItem('presets').split(','); } catch {}
+  let presets = loadpresets()
 
   while (presetDropdown.firstChild) {
     presetDropdown.removeChild(presetDropdown.lastChild);
@@ -71,25 +70,6 @@ const enablepreset = (preset) => {
   }
 }
 
-const savepreset = (preset, name) => {
-  let presets = Array();
-  let presetName = name.replace(',', ' ');
-  try { presets = localStorage.getItem('presets').split(','); } catch {}
-
-  try { localStorage.removeItem('preset_' + presetName); } catch {}
-
-  presets = removefromarray(removeredundantitems(presets), presetName);
-  presets.push(presetName);
-
-  localStorage.setItem('preset_' + presetName, preset);
-  localStorage.setItem('presets', presets);
-
-  // Update UI & listed presets
-  resetsearchbox(true);
-  populatepresets();
-  enablepresetbyname(name);
-}
-
 const removecurrentpreset = () => {
   let presetName = document.getElementById("presets").value;
   if (presetName == "noPreset" || presetName == "newPreset")
@@ -138,13 +118,17 @@ const engineselection = () => {
 }
 
 const saveselection = () => {
-  let textbox = document.getElementById("searchbox");
-  let selection = document.getElementById("presets").value;
-  let name = selection;
+    let textbox = document.getElementById("searchbox");
+    let selection = document.getElementById("presets").value;
+    let name = selection;
 
-  if (selection == "newPreset")
-    name = textbox.value;
-  savepreset(engineselection(), name);
+    if (selection == "newPreset")
+	name = textbox.value;
+    savepreset(engineselection(), name);
+    // Update UI & listed presets
+    resetsearchbox(true);
+    populatepresets();
+    enablepresetbyname(name);
 }
 
 const onpresetselected = (event) => {
