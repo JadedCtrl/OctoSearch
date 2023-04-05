@@ -1,13 +1,13 @@
 // Saves a search-group of the given `name`, containing all search-engines of
 // `preset` (which is an array of search-engine display-names truncated to 7 chars).
-function savepreset(preset, name) {
+function savePreset(preset, name) {
     let presets = Array();
     let presetName = name.replace(',', ' ');
     try { presets = localStorage.getItem('presets').split(','); } catch {}
 
     try { localStorage.removeItem('preset_' + presetName); } catch {}
 
-    presets = removefromarray(removeredundantitems(presets), presetName);
+    presets = removeFromArray(removeRedundantItems(presets), presetName);
     presets.push(presetName);
 
     localStorage.setItem('preset_' + presetName, preset);
@@ -16,6 +16,6 @@ function savepreset(preset, name) {
 
 
 // Load an array of all saved preset's names.
-function loadpresets() {
+function loadPresets() {
     try { return localStorage.getItem('presets').split(','); } catch { return []; }
 }
